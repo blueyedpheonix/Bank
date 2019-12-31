@@ -2,14 +2,16 @@ package systems;
 
 import utils.IdGenerator;
 
-public  class Client {
+import java.util.Objects;
+
+public abstract class Client {
     private final int ID;
     private String name;
     private double balance;
     private Account[] accounts = new Account[10];
     private int Acounter = 0;
-    private int commissionRate = 0;
-    private int interestRate = 0;
+    protected double commissionRate;
+    protected double interestRate;
 
     //contructor
 
@@ -45,7 +47,7 @@ public  class Client {
         this.balance = balance;
     }
 
-    //functonality
+    //functionality
 
     public void addAccount(Account account){
         if(Acounter >= accounts.length){
@@ -58,7 +60,7 @@ public  class Client {
     public Account getAccount(int i){
         return accounts[i];
     }
-    public void removeAccount(int ID){
+    public void removeAccount(Integer ID){
         int position = -1;
         for(int i = 0; i < Acounter; i++){
             if(accounts[i].getID() == ID) {
@@ -77,6 +79,17 @@ public  class Client {
       }
 
     }
+
+    public void deposite(int amount){
+        balance += amount;
+
+    }
+
+    public void withdrow(int amount){
+        balance -= (amount * commissionRate);
+    }
+
+
     public double getFortune (){
         double sum = balance;
         for (int i = 0; i < accounts.length; i++){
@@ -87,5 +100,18 @@ public  class Client {
         return sum;
     }
 
+// Overrides
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return ID == client.ID;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ID);
+    }
 }

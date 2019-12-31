@@ -2,8 +2,20 @@ package systems;
 
 public class Bank {
     private Client[] clients = new Client[100];
+    private int Ccounter;
+    private double balance;
+
+// Constructor
 
     public Bank() {
+    }
+
+// Getters & Setters
+
+    public void setBalance(){
+        for(int i =0; i < clients.length; i++){
+            balance += clients[i].getFortune();
+        }
     }
     public double getBankBalance(){
         double sum = 0;
@@ -13,37 +25,41 @@ public class Bank {
         }
         return sum;
     }
-    public void addClinet(Client client){
-        int counter = 0;
-        while(clients[counter] != null && counter < clients.length){
-            counter++;
+
+// Functionality
+
+    public void addClient(Client client){
+        if(Ccounter > clients.length)
+            System.out.println("there is no more room for Clients");
+        else{
+            clients[Ccounter] = client;
+            Ccounter++;
         }
-        if(counter == clients.length)
-            System.out.println("no more room for accounts");
-        else
-            clients[counter] = client;
     }
     public void removeClinet(int ID){
-        int counter = 0;
-        int clinentID = clients[counter].getID();
-        while(clinentID != ID && counter < clients.length){
-            if (clients[counter] != null) {
-                clinentID = clients[counter].getID();
-            }
-            counter++;
+        int position = -1;
+        for(int i = 0; i < Ccounter; i++){
+            if(clients[i].getID() == ID)
+                position = i;
         }
-        if(clinentID != ID)
-            System.out.println("this client ID does not exist");
-        else{
-            clients[counter] = null;
-            for(int i = 0; i < clients.length - 1; i++){
+        if(position != -1){
+            this.balance += clients[position].getBalance();
+            clients[position] = null;
+            for(int i = position; i < Ccounter; i++){
                 clients[i] = clients[i+1];
             }
+            Ccounter--;
+        }else{
+            System.out.println("There is no client with this ID");
         }
     }
 
     public Client[] getClients() {
         return clients;
+    }
+
+    public void printClientDetails(Client client){
+        System.out.println(client.toString());
     }
 
 }
